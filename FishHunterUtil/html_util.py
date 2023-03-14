@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from css_util import get_css_from_html,get_notdisplayed_style,convert_csstext_to_cssdict
+from FishHunterUtil.css_util import get_css_from_html,get_notdisplayed_style,convert_csstext_to_cssdict
 import re
 
 # Return cleanest HTML File

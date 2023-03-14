@@ -1,6 +1,6 @@
 import json, os
-from html_util import *
-from css_util import *
+from FishHunterUtil.css_util import *
+from FishHunterUtil.html_util import *
 
 def get_dataset_features(dataset_path):
     # clean dataset
