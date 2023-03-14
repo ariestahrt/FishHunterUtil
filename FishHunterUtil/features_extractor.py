@@ -37,7 +37,7 @@ def get_dataset_features(dataset_path):
     with open(dataset_path+"/clean.html", "w", encoding="utf-8") as f:
         f.write(lxml.html.tostring(html, encoding="unicode"))
 
-    css_propval = extract_css_propval_from_file(dataset_path+"/assets/__clean__.css")
+    css_propval = extract_css_propval_from_file(dataset_path+"/assets/__clean__.css", document_root=dataset_path)
     # Save css_propval to css.json
     with open(dataset_path+"/css.json", "w", encoding="utf-8") as f:
         json.dump(css_propval, f, indent=4, sort_keys=True)
