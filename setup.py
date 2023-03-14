@@ -11,7 +11,6 @@ setup(
         "lxml",
         "tinycss",
         "beautifulsoup4",
-        "json",
         "hashlib",
         "selenium",
         "webdriver_manager"
