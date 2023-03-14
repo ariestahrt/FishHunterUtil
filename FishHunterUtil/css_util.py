@@ -73,7 +73,7 @@ def extract_css_propval_from_file(file_path, document_root=""):
                         continue
 
                     # check if the url is in local asset
-                    if os.path.exists(document_root+url_value):
+                    if os.path.isfile(document_root+url_value):
                         # get the hash value
                         hash_value = get_hash_value_from_file(document_root+url_value)
                         file_hashes[url_value] = hash_value
