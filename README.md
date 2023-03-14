@@ -1,13 +1,6 @@
-# Python Complete Webpage Downloader
+# Fish Hunter Util
 
 ## Installation
 ```
-pip install --editable WebPageClone/
-```
-
-## Usage
-```py
-from WebPageClone import save_webpage
-
-save_webpage("https://www.google.com", saved_path="result")
+pip install git+https://github.com/ariestahrt/FishHunterUtil.git
 ```
