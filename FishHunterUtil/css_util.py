@@ -19,6 +19,10 @@ def get_hash_value_from_file(file_path):
     hasher.update(contents)
     return hasher.hexdigest()
 
+def get_hash_value_from_text(text):
+    hash_object = hashlib.sha256(text.encode('utf-8'))
+    return hash_object.hexdigest()
+
 # extract css propval from css file
 def extract_css_propval_from_file(file_path, document_root=""):
     # Load the CSS file
@@ -72,9 +76,16 @@ def extract_css_propval_from_file(file_path, document_root=""):
                     if os.path.isfile(document_root+url_value):
                         # get the hash value
                         hash_value = get_hash_value_from_file(url_value)
-                        
                         file_hashes[url_value] = hash_value
+
                         property_value[property_value.index(value)] = "sha256(" + file_hashes[url_value] + ")"
+                        continue
+
+                    # check if the url is data:image
+                    if url_value.startswith("data:image"):
+                        hash_value = get_hash_value_from_text(url_value)
+                        
+                        property_value[property_value.index(value)] = "sha256(" + hash_value + ")"
                         continue
                         
                     # update the value in the list
