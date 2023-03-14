@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="FishHunterUtil",
-    version="1.0.6",
+    version="1.1.0",
     packages=find_packages(),
     install_requires=[
         "regex",
@@ -12,7 +12,10 @@ setup(
         "tinycss",
         "beautifulsoup4",
         "selenium",
-        "webdriver_manager"
+        "webdriver_manager",
+        "scikit-learn",
+        "ngram",
+        "numpy"
     ],
     author="I Kadek Agus Ariesta Putra",
     author_email="ikadekagusariestaputra@gmail.com",
