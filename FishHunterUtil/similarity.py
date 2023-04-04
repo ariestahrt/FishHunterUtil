@@ -224,21 +224,21 @@ def lcs(setA, setB):
             else:
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
         
-    i=len(setA)
-    j=len(setB)
+    # i=len(setA)
+    # j=len(setB)
     res=[]
 
     # Dapatkan subsequencenya
-    while i > 0 and j > 0:
-        if setA[i-1] == setB[j-1]:
-            res=[setB[j-1]]+res
-            j-=1
-            i-=1
-        else:
-            if dp[i-1][j] > dp[i][j-1]:
-                i-=1
-            else:
-                j-=1
+    # while i > 0 and j > 0:
+    #     if setA[i-1] == setB[j-1]:
+    #         res=[setB[j-1]]+res
+    #         j-=1
+    #         i-=1
+    #     else:
+    #         if dp[i-1][j] > dp[i][j-1]:
+    #             i-=1
+    #         else:
+    #             j-=1
 
     # Return berupa panjang subsequencenya dan subsequence itu sendiri
     return [dp[len(setA)][len(setB)] , res]
