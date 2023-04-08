@@ -137,6 +137,8 @@ def convert_csstext_to_cssdict(css_text, css_dict, html_text="", validate_css=Tr
         try:
             for selector in rule.selector.as_css().split(","):
                 selector = selector.strip()
+
+                els = []
                 try: els = soup.select(selector)
                 except Exception as ex: None
                 
