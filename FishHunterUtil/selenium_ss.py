@@ -14,7 +14,11 @@ def screenshot(url, save_to="test_ss.png"):
             options.add_argument('--headless=new')
             options.add_argument('--no-sandbox')
             options.add_argument('--disable-dev-shm-usage')
-            options.add_argument('--disable-javascript')
+            # disable javascript
+            # options.add_argument('--disable-javascript')
+            # disable GPU
+            options.add_argument('--disable-gpu')
+
             # disable cors
             options.add_argument('--disable-web-security')
             options.add_argument('--allow-running-insecure-content')
@@ -36,6 +40,10 @@ def screenshot(url, save_to="test_ss.png"):
             driver.maximize_window()
             driver.set_window_size(1920, 1080)
             driver.get(url)
+
+            # wait for page to load
+            driver.implicitly_wait(10)
+            
             ss = driver.get_screenshot_as_png()
 
             # convert to jpg
