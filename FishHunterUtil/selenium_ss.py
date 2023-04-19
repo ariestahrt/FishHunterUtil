@@ -8,6 +8,7 @@ from PIL import Image
 from io import BytesIO
 from time import sleep
 import signal
+import os
 
 def worker(url, save_to="test_ss.png"):
     options = Options()
@@ -72,6 +73,8 @@ def screenshot(url, save_to="test_ss.png"):
             break
         except TimeoutException as e:
             print("TimeoutException: ", e)
+            # kill chrome process
+            os.system("pkill -f chrome")
             continue
         except Exception as e:
             print("Exception: ", e)
