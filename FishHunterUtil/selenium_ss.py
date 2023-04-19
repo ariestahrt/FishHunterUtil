@@ -6,6 +6,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
 from PIL import Image
 from io import BytesIO
+from time import sleep
 
 def screenshot(url, save_to="test_ss.png"):
     while True:
@@ -28,10 +29,10 @@ def screenshot(url, save_to="test_ss.png"):
             options.add_argument('--allow-cross-origin-auth-prompt')
 
             prefs = {}
-            prefs["webkit.webprefs.javascript_enabled"] = False
-            prefs["profile.content_settings.exceptions.javascript.*.setting"] = 2
-            prefs["profile.default_content_setting_values.javascript"] = 2
-            prefs["profile.managed_default_content_settings.javascript"] = 2
+            # prefs["webkit.webprefs.javascript_enabled"] = False
+            # prefs["profile.content_settings.exceptions.javascript.*.setting"] = 2
+            # prefs["profile.default_content_setting_values.javascript"] = 2
+            # prefs["profile.managed_default_content_settings.javascript"] = 2
 
             options.add_experimental_option("prefs", prefs)
 
@@ -42,7 +43,12 @@ def screenshot(url, save_to="test_ss.png"):
             driver.get(url)
 
             # wait for page to load
-            driver.implicitly_wait(10)
+            # driver.implicitly_wait(10)
+            # wait 5 seconds for page to load
+            sleep(5)
+
+            # stop page loading
+            driver.execute_script("window.stop();")
             
             ss = driver.get_screenshot_as_png()
 
