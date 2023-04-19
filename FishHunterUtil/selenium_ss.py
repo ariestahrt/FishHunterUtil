@@ -1,16 +1,16 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver.common.by import By
-from PIL import Image
-from io import BytesIO
 from time import sleep
 import signal
 import os
 
 def worker(url, save_to="test_ss.png"):
+    from selenium import webdriver
+    from selenium.webdriver.chrome.options import Options
+    from selenium.webdriver.chrome.service import Service
+    from webdriver_manager.chrome import ChromeDriverManager
+    from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+    from selenium.webdriver.common.by import By
+    from PIL import Image
+    from io import BytesIO
     options = Options()
     options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')
