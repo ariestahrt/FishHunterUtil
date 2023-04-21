@@ -1,22 +1,41 @@
-from time import sleep
-import signal
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.by import By
+from PIL import Image
+from io import BytesIO
 import os
 
-def worker(url, save_to="test_ss.png"):
-    from selenium import webdriver
+def init_firefox_driver(javascript_enable=True):
+    from selenium.webdriver.firefox.options import Options
+
+    options = Options()
+
+    # headless
+    options.add_argument('-headless')
+
+    # encoding to utf-8
+    options.set_preference("intl.accept_languages", "en-US, en")
+
+    if javascript_enable == False:
+        options.set_preference("javascript.enabled", False)
+
+    if os.name == 'posix':
+        options.binary = "/opt/firefox/./firefox"
+    else:
+        options.binary = "C:\\Program Files\\Mozilla Firefox\\firefox.exe"
+
+    driver = webdriver.Firefox(options=options)
+
+    return driver
+
+def init_chrome_driver(javascript_enable=True):
     from selenium.webdriver.chrome.options import Options
     from selenium.webdriver.chrome.service import Service
-    from webdriver_manager.chrome import ChromeDriverManager
-    from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-    from selenium.webdriver.common.by import By
-    from PIL import Image
-    from io import BytesIO
+
     options = Options()
     options.add_argument('--headless=new')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-    # disable javascript
-    # options.add_argument('--disable-javascript')
     # disable GPU
     options.add_argument('--disable-gpu')
 
@@ -28,27 +47,40 @@ def worker(url, save_to="test_ss.png"):
     options.add_argument('--allow-file-access')
     options.add_argument('--allow-cross-origin-auth-prompt')
 
-    prefs = {}
-    # prefs["webkit.webprefs.javascript_enabled"] = False
-    # prefs["profile.content_settings.exceptions.javascript.*.setting"] = 2
-    # prefs["profile.default_content_setting_values.javascript"] = 2
-    # prefs["profile.managed_default_content_settings.javascript"] = 2
+    if javascript_enable == False:
+        options.add_argument('--disable-javascript')
+        prefs = {}
+        prefs["webkit.webprefs.javascript_enabled"] = False
+        prefs["profile.content_settings.exceptions.javascript.*.setting"] = 2
+        prefs["profile.default_content_setting_values.javascript"] = 2
+        prefs["profile.managed_default_content_settings.javascript"] = 2
 
-    options.add_experimental_option("prefs", prefs)
+        options.add_experimental_option("prefs", prefs)
 
     driver = webdriver.Chrome(service=Service("/usr/local/bin/chromedriver"), options=options, desired_capabilities=DesiredCapabilities.CHROME)
 
+    return driver
+
+def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=True):
+    if driver == "firefox":
+        driver = init_firefox_driver(javascript_enable=javascript_enable)
+    elif driver == "chrome":
+        driver = init_chrome_driver(javascript_enable=javascript_enable)
+
     driver.maximize_window()
     driver.set_window_size(1920, 1080)
+
+    print(">> Start navigating to {}".format(url))
     driver.get(url)
+    print(">> Navigate DONE~")
 
-    # wait for page to load
-    driver.implicitly_wait(2)
+    # wait 5 seconds
+    print(">> Wait 5 seconds")
+    driver.implicitly_wait(5)
 
-    # stop page loading
-    driver.execute_script("window.stop();")
-    
+    print(">> Start taking screenshot")
     ss = driver.get_screenshot_as_png()
+    print(">> Screenshot taken")
 
     # convert to jpg
     img = Image.open(BytesIO(ss))
@@ -57,28 +89,6 @@ def worker(url, save_to="test_ss.png"):
 
     driver.quit()
 
-class TimeoutException(Exception):
-    pass
-
-def timeout_handler(signum, frame):
-    raise TimeoutException("Function call timed out")
-
-def screenshot(url, save_to="test_ss.png"):
-    while True:
-        try:
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(5)
-            worker(url, save_to)
-            signal.alarm(0)
-            break
-        except TimeoutException as e:
-            print("TimeoutException: ", e)
-            # kill chrome process
-            os.system("pkill -f chrome")
-            continue
-        except Exception as e:
-            print("Exception: ", e)
-            continue
-
 if __name__ == "__main__":
-    screenshot("https://www.whatismybrowser.com/detect/is-javascript-enabled", save_to="test_ss.jpg")
+    # screenshot_firefox("file:///C:/code/research/fish-hunter-allow-list-scrapper/files/bb36232a-5199-4d7b-8e41-338e8b9837ca/index.html", save_to="test_ss.jpg")
+    screenshot("file:///C:/code/research/fish-hunter-allow-list-scrapper/files/73b7a48d-1624-43a8-9ad8-3ecc0072c594/index.html", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
