@@ -5,7 +5,7 @@ from FishHunterUtil.html_util import *
 def get_dataset_features(dataset_path):
     # clean dataset
     # cleaning HTML
-    html_text = open(dataset_path+"/index.html", "r", errors='ignore').read()
+    html_text = open(dataset_path+"/index.html", "r", encoding="utf-8", errors='ignore').read()
     html_clean = remove_hidden_element(html_text=html_text, html_root=dataset_path+"/")
     
     # Save clean html to clean.html
@@ -44,7 +44,7 @@ def get_dataset_features(dataset_path):
         json.dump(css_propval, f, indent=4, sort_keys=True)
 
     # GET TEXT FEATURES
-    html_text = open(dataset_path+"/clean.html", "r", errors='ignore').read()
+    html_text = open(dataset_path+"/clean.html", "r", encoding="utf-8",errors='ignore').read()
     feature_text = get_rendered_text(html_text)
 
     # GET HTML STRUCTURE FEATURES

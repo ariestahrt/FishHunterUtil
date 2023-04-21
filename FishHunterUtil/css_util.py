@@ -213,7 +213,7 @@ def get_css_from_html(html_text, html_root):
         if urlparse(files).scheme == "":
             print("Opening", files)
             try:
-                with open(html_root + files, "r") as f: css_text += f.read()
+                with open(html_root + files, "r", encoding="utf-8") as f: css_text += f.read()
             except Exception as ex:
                 print("[X] error while opening files", ex)
                 continue
