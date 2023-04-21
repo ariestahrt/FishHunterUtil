@@ -63,33 +63,42 @@ def init_chrome_driver(javascript_enable=True):
     return driver
 
 def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=True):
-    if driver == "firefox":
-        driver = init_firefox_driver(javascript_enable=javascript_enable)
-    elif driver == "chrome":
-        driver = init_chrome_driver(javascript_enable=javascript_enable)
+    driver = None
+    while True:
+        try:
+            if driver == "firefox":
+                driver = init_firefox_driver(javascript_enable=javascript_enable)
+            elif driver == "chrome":
+                driver = init_chrome_driver(javascript_enable=javascript_enable)
 
-    driver.maximize_window()
-    driver.set_window_size(1920, 1080)
+            driver.maximize_window()
+            driver.set_window_size(1920, 1080)
 
-    print(">> Start navigating to {}".format(url))
-    driver.get(url)
-    print(">> Navigate DONE~")
+            print(">> Start navigating to {}".format(url))
+            driver.get(url)
+            print(">> Navigate DONE~")
 
-    print("Delay 5 sec")
-    # delay 5 seconds
-    time.sleep(5)
-    
+            print("Delay 5 sec")
+            # delay 5 seconds
+            time.sleep(5)
+            
 
-    print(">> Start taking screenshot")
-    ss = driver.get_screenshot_as_png()
-    print(">> Screenshot taken")
+            print(">> Start taking screenshot")
+            ss = driver.get_screenshot_as_png()
+            print(">> Screenshot taken")
 
-    # convert to jpg
-    img = Image.open(BytesIO(ss))
-    img = img.convert("RGB")
-    img.save(save_to)
+            # convert to jpg
+            img = Image.open(BytesIO(ss))
+            img = img.convert("RGB")
+            img.save(save_to)
 
-    driver.quit()
+            driver.quit()
+        except Exception as ex:
+            print(ex)
+            print(">> Error, retrying...")
+        finally:
+            try: driver.quit()
+            except: pass
 
 if __name__ == "__main__":
     screenshot("https://www.whatismybrowser.com/detect/is-javascript-enabled", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
