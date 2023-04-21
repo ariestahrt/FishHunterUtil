@@ -63,19 +63,19 @@ def init_chrome_driver(javascript_enable=True):
     return driver
 
 def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=True):
-    driver = None
+    web_driver = None
     while True:
         try:
             if driver == "firefox":
-                driver = init_firefox_driver(javascript_enable=javascript_enable)
+                web_driver = init_firefox_driver(javascript_enable=javascript_enable)
             elif driver == "chrome":
-                driver = init_chrome_driver(javascript_enable=javascript_enable)
+                web_driver = init_chrome_driver(javascript_enable=javascript_enable)
 
-            driver.maximize_window()
-            driver.set_window_size(1920, 1080)
+            web_driver.maximize_window()
+            web_driver.set_window_size(1920, 1080)
 
             print(">> Start navigating to {}".format(url))
-            driver.get(url)
+            web_driver.get(url)
             print(">> Navigate DONE~")
 
             print("Delay 5 sec")
@@ -84,7 +84,7 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
             
 
             print(">> Start taking screenshot")
-            ss = driver.get_screenshot_as_png()
+            ss = web_driver.get_screenshot_as_png()
             print(">> Screenshot taken")
 
             # convert to jpg
@@ -92,12 +92,12 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
             img = img.convert("RGB")
             img.save(save_to)
 
-            driver.quit()
+            web_driver.quit()
         except Exception as ex:
             print(ex)
             print(">> Error, retrying...")
         finally:
-            try: driver.quit()
+            try: web_driver.quit()
             except: pass
 
 if __name__ == "__main__":
