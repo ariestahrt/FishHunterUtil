@@ -93,6 +93,7 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
             img.save(save_to)
 
             web_driver.quit()
+            return
         except Exception as ex:
             print(ex)
             print(">> Error, retrying...")
