@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from PIL import Image
 from io import BytesIO
 import os
+import time
 
 def init_firefox_driver(javascript_enable=True):
     from selenium.webdriver.firefox.options import Options
@@ -74,9 +75,10 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
     driver.get(url)
     print(">> Navigate DONE~")
 
-    # wait 5 seconds
-    print(">> Wait 5 seconds")
-    driver.implicitly_wait(5)
+    print("Delay 5 sec")
+    # delay 5 seconds
+    time.sleep(5)
+    
 
     print(">> Start taking screenshot")
     ss = driver.get_screenshot_as_png()
@@ -90,5 +92,4 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
     driver.quit()
 
 if __name__ == "__main__":
-    # screenshot_firefox("file:///C:/code/research/fish-hunter-allow-list-scrapper/files/bb36232a-5199-4d7b-8e41-338e8b9837ca/index.html", save_to="test_ss.jpg")
-    screenshot("file:///C:/code/research/fish-hunter-allow-list-scrapper/files/73b7a48d-1624-43a8-9ad8-3ecc0072c594/index.html", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
+    screenshot("https://www.whatismybrowser.com/detect/is-javascript-enabled", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
