@@ -12,7 +12,7 @@ def init_firefox_driver(javascript_enable=True):
     options = Options()
 
     # headless
-    options.add_argument('-headless')
+    # options.add_argument('-headless')
 
     if javascript_enable == False:
         options.set_preference("javascript.enabled", False)
@@ -77,6 +77,7 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
             elif driver == "chrome":
                 web_driver = init_chrome_driver(javascript_enable=javascript_enable)
 
+            web_driver.set_page_load_timeout(5)
             web_driver.maximize_window()
             web_driver.set_window_size(1920, 1080)
 
@@ -103,7 +104,7 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
         except Exception as ex:
             print(ex)
             print(">> Error, retrying...")
-            if "Reached error page" in str(ex) and javascript_enable == True:
+            if javascript_enable == True:
                 print(">> Javascript is enabled, retrying with javascript disabled")
                 javascript_enable = False
                 continue
@@ -113,4 +114,4 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
             except: pass
 
 if __name__ == "__main__":
-    screenshot("file:///C:/code/research/Download/643ad04c583b2ca2b39c63ac/index.html", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
+    screenshot("file:///C:/code/research/Download/643ad03f583b2ca2b39c63a1/index.html", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
