@@ -103,7 +103,7 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
         except Exception as ex:
             print(ex)
             print(">> Error, retrying...")
-            if "Reached error page" in ex and javascript_enable == True:
+            if "Reached error page" in str(ex) and javascript_enable == True:
                 print(">> Javascript is enabled, retrying with javascript disabled")
                 javascript_enable = False
                 continue
