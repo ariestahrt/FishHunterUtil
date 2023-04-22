@@ -14,9 +14,6 @@ def init_firefox_driver(javascript_enable=True):
     # headless
     options.add_argument('-headless')
 
-    # encoding to utf-8
-    options.set_preference("intl.accept_languages", "en-US, en")
-
     if javascript_enable == False:
         options.set_preference("javascript.enabled", False)
 
@@ -64,7 +61,16 @@ def init_chrome_driver(javascript_enable=True):
 
 def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=True):
     web_driver = None
+    max_retry = 5
     while True:
+        if max_retry <= 0:
+            print(">> Max retry reached, aborting")
+
+            # create black image
+            img = Image.new("RGB", (1920, 1080), (0, 0, 0))
+            img.save(save_to)
+
+            break
         try:
             if driver == "firefox":
                 web_driver = init_firefox_driver(javascript_enable=javascript_enable)
@@ -93,13 +99,18 @@ def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=T
             img.save(save_to)
 
             web_driver.quit()
-            return
+            break
         except Exception as ex:
             print(ex)
             print(">> Error, retrying...")
+            if "Reached error page" in ex and javascript_enable == True:
+                print(">> Javascript is enabled, retrying with javascript disabled")
+                javascript_enable = False
+                continue
         finally:
+            max_retry -= 1
             try: web_driver.quit()
             except: pass
 
 if __name__ == "__main__":
-    screenshot("https://www.whatismybrowser.com/detect/is-javascript-enabled", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
+    screenshot("file:///C:/code/research/Download/643ad04c583b2ca2b39c63ac/index.html", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
