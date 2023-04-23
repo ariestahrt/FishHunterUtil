@@ -12,7 +12,7 @@ def init_firefox_driver(javascript_enable=True):
     options = Options()
 
     # headless
-    # options.add_argument('-headless')
+    options.add_argument('-headless')
 
     if javascript_enable == False:
         options.set_preference("javascript.enabled", False)
@@ -59,59 +59,51 @@ def init_chrome_driver(javascript_enable=True):
 
     return driver
 
-def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=True):
+def screenshot(url, driver="firefox", save_to="test_ss.png", javascript_enable=True, max_retry=5):
     web_driver = None
-    max_retry = 5
-    while True:
-        if max_retry <= 0:
-            print(">> Max retry reached, aborting")
+    if max_retry <= 0:
+        # create black image
+        img = Image.new("RGB", (1920, 1080), (0, 0, 0))
+        img.save(save_to)
 
-            # create black image
-            img = Image.new("RGB", (1920, 1080), (0, 0, 0))
-            img.save(save_to)
+        return
+    
+    try:
+        if driver == "firefox":
+            web_driver = init_firefox_driver(javascript_enable=javascript_enable)
+        elif driver == "chrome":
+            web_driver = init_chrome_driver(javascript_enable=javascript_enable)
 
-            break
-        try:
-            if driver == "firefox":
-                web_driver = init_firefox_driver(javascript_enable=javascript_enable)
-            elif driver == "chrome":
-                web_driver = init_chrome_driver(javascript_enable=javascript_enable)
+        web_driver.set_page_load_timeout(5)
+        web_driver.maximize_window()
+        web_driver.set_window_size(1920, 1080)
 
-            web_driver.set_page_load_timeout(5)
-            web_driver.maximize_window()
-            web_driver.set_window_size(1920, 1080)
+        print(">> Start navigating to {}".format(url))
+        web_driver.get(url)
+        print(">> Navigate DONE~")
 
-            print(">> Start navigating to {}".format(url))
-            web_driver.get(url)
-            print(">> Navigate DONE~")
+        print("Delay 5 sec")
+        # delay 5 seconds
+        time.sleep(5)
+        
 
-            print("Delay 5 sec")
-            # delay 5 seconds
-            time.sleep(5)
-            
+        print(">> Start taking screenshot")
+        ss = web_driver.get_screenshot_as_png()
+        print(">> Screenshot taken")
 
-            print(">> Start taking screenshot")
-            ss = web_driver.get_screenshot_as_png()
-            print(">> Screenshot taken")
+        # convert to jpg
+        img = Image.open(BytesIO(ss))
+        img = img.convert("RGB")
+        img.save(save_to)
 
-            # convert to jpg
-            img = Image.open(BytesIO(ss))
-            img = img.convert("RGB")
-            img.save(save_to)
-
-            web_driver.quit()
-            break
-        except Exception as ex:
-            print(ex)
-            print(">> Error, retrying...")
-            if javascript_enable == True:
-                print(">> Javascript is enabled, retrying with javascript disabled")
-                javascript_enable = False
-                continue
-        finally:
-            max_retry -= 1
-            try: web_driver.quit()
-            except: pass
+        web_driver.quit()
+        return
+    except Exception as ex:
+        print(ex)
+        print(">> Error, retrying...")
+        try: web_driver.quit()
+        except: pass
+        return screenshot(url, driver=driver, save_to=save_to, javascript_enable=javascript_enable, max_retry=max_retry-1)
 
 if __name__ == "__main__":
     screenshot("file:///C:/code/research/Download/643ad03f583b2ca2b39c63a1/index.html", save_to="test_ss.jpg", driver="firefox", javascript_enable=True)
