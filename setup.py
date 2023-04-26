@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="FishHunterUtil",
-    version="1.2.4",
+    version="1.2.5",
     packages=find_packages(),
     install_requires=[
         "regex",
@@ -15,7 +15,9 @@ setup(
         "webdriver_manager",
         "scikit-learn",
         "ngram",
-        "numpy"
+        "numpy",
+        "tldextract",
+        "python-whois",
     ],
     author="I Kadek Agus Ariesta Putra",
     author_email="ikadekagusariestaputra@gmail.com",
