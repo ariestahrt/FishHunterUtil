@@ -78,9 +78,9 @@ def get_whois(url):
     return {
         "domain_name": apex_domain,
         "registrar_name": registrar,
-        "created_date": expiration_date,
-        "updated_date": creation_date,
-        "expires_date": updated_date,
+        "created_date": creation_date,
+        "updated_date": updated_date,
+        "expires_date": expiration_date,
         "registrar_url": registrar_url,
         "raw_data": raw_data
     }
