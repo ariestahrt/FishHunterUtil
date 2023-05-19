@@ -63,7 +63,7 @@ def get_rendered_text(html):
     soup = BeautifulSoup(html, "html.parser")
     html_text = soup.get_text()
 
-    # Cleaning the text
+    # Repair text
     while "\n\n" in html_text:
         html_text=html_text.replace("\n\n", "\n")
 

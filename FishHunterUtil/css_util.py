@@ -126,7 +126,7 @@ def convert_cssdict_to_cssfile(css_dict, save_to="css_fixed.css"):
             props_value += f"\t{props}: {css_dict[selector][props]};\n"
         
         out = selector + "{\n" + props_value + "}\n"
-        with open(save_to, "a") as f: f.write(out)
+        with open(save_to, "a", encoding="utf-8", errors="ignore") as f: f.write(out)
 
 def convert_csstext_to_cssdict(css_text, css_dict, html_text="", validate_css=True):
     css_parser=tinycss.make_parser('page3');
