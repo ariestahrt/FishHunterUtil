@@ -26,7 +26,7 @@ def get_hash_value_from_text(text):
 # extract css propval from css file
 def extract_css_propval_from_file(file_path, document_root=""):
     # Load the CSS file
-    with open(file_path, 'r') as f:
+    with open(file_path, 'r', encoding="utf-8", errors="ignore") as f:
         css_string = f.read()
 
     # Parse the CSS file using tinycss
